@@ -39,25 +39,47 @@ function showMovieInfo(movieArray){
     starRatingContent="";
     
     for (const item of movieArray){
+        let movieGenres="";
+        let movieGenreArray= item.genres;
+        for (i=0; i<movieGenreArray.length;i++){
+          if (i<movieGenreArray.length-1){
+          movieGenres+= movieGenreArray[i].name + ", ";}
+          else {
+            movieGenres+= movieGenreArray[i].name;
+          }
+        }
         let starRating= Math.floor((item.vote_average/10)*5);
-        console.log(starRating)
         let starRatingContent="";
         for (i=0; i<5; i++){
             if (i<=starRating-1){
-                starRatingContent+=`<span class="fa fa-star checked"></span>`;
+                starRatingContent+=`<span class="fa fa-star checked float-end"></span>`;
             }
             else{
-                starRatingContent+=`<span class="fa fa-star"></span>`
+                starRatingContent+=`<span class="fa fa-star float-end"></span>`
             }
         }
         movieContainer.innerHTML+=`
-        <li>
+        <li id=${item.id}>
         <div class="row">
         <div class="col-10">
             <h5 class="list-title movie-title" id="movie-title">${item.title}</h5>
             <p class="list-text movie-tagline">${item.tagline}</p>
         </div>
         <div class="col-2">${starRatingContent}
+                <button class="btn btn-outline-light float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Información</button>
+        <div class="offcanvas offcanvas-top bg-dark" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+        <div class="offcanvas-header">
+          <h2 class="offcanvas-title" id="offcanvasTopLabel">${item.title}</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <hr>
+        <div class="offcanvas-body">
+          <h3></h3>
+          <p>${item.overview}</p>
+          <p class="font-weight-bold">Genres: ${movieGenres}</p>
+        </div>
+        </div>
+
         </div>`
 
        
@@ -66,6 +88,13 @@ function showMovieInfo(movieArray){
          movieContainer.innerHTML+=`</div>`       ;
   }
 
+  function getMovieIds(filteredMovieArray){
+    movieIds=[];
+    for (movie in filteredMovieArray){
+      movieIds.push(movie.id);
+    }
+    return (movieIds);
+  }
 
 function filterMovies(movieArray){
     let filteredMovies= movieArray.filter(
@@ -87,7 +116,6 @@ function filterMovies(movieArray){
 
 
     )
-    console.log(filteredMovies);
     showMovieInfo(filteredMovies);
 }
 
@@ -96,7 +124,6 @@ function filterMovies(movieArray){
 getJSONData("https://japceibal.github.io/japflix_api/movies-data.json").then(function (resultObj) {
     if (resultObj.status === "ok") {
       moviesData = resultObj.data;
-      console.log(moviesData);
 
     }
   });

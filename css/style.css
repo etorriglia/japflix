@@ -40,3 +40,11 @@ li {
     color: gray;
 }
 
+.btn {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+span {
+    align-content: center;
+}
