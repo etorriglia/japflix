@@ -26,3 +26,26 @@ main {
 .offcanvas-top{
     height: fit-content;
 }
+
+li {
+    color:whitesmoke;
+    font-size: larger;
+    list-style-type: none;
+}
+
+.movie-title {
+    font-weight: bolder;
+}
+.movie-tagline {
+    color: gray;
+}
+
+.btn-outline-light {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.btn-secondary {
+    margin-bottom: 2%;
+    margin-left: 1%;
+}
