@@ -1,8 +1,9 @@
 let searchQuery="";
 
-
-
 let moviesData=[];
+
+
+//Cargar datos de archivo JSON
 
 let getJSONData = function(url){
     let result = {};
@@ -28,36 +29,68 @@ let getJSONData = function(url){
     });
 }
 
+//Guardar los géneros contenidos en un array en un string, separados por una coma
 
 
+function listMovieGenres(movieGenresArray){
+
+  let movieGenres="";
+  
+  for (i=0; i<movieGenresArray.length;i++){
+    if (i<movieGenresArray.length-1){
+      movieGenres+= movieGenresArray[i].name + ", ";
+    }
+    else {
+      movieGenres+= movieGenresArray[i].name;
+          }
+        }
+  
+  return (movieGenres);
+}
 
 
+//Guardar los IDs de las películas que coinciden con el criterio de búsqueda en un array
+
+
+  function getMovieIds(filteredMovieArray){
+    movieIds=[];
+    for (movie in filteredMovieArray){
+      movieIds.push(movie.id);
+    }
+    return (movieIds);
+  }
+
+//Muestra el puntaje en estrellas en el documento HTML
+
+
+  function showStarRating(rating){
+    let starRatingContent="";
+    for (i=0; i<5; i++){
+        if (i<=rating-1){
+            starRatingContent+=`<span class="fa fa-star checked float-end"></span>`;
+        }
+        else{
+            starRatingContent+=`<span class="fa fa-star float-end"></span>`
+        }
+    }
+    return (starRatingContent);
+
+  }
+
+  // Muestra la información de películas contenidas en un array en el documento HTML.
 
 function showMovieInfo(movieArray){
+  
     let movieContainer = document.getElementById("lista");
     movieContainer.innerHTML= "";
     starRatingContent="";
     
     for (const item of movieArray){
-        let movieGenres="";
-        let movieGenreArray= item.genres;
-        for (i=0; i<movieGenreArray.length;i++){
-          if (i<movieGenreArray.length-1){
-          movieGenres+= movieGenreArray[i].name + ", ";}
-          else {
-            movieGenres+= movieGenreArray[i].name;
-          }
-        }
+
+        let movieGenres= listMovieGenres(item.genres);
         let starRating= Math.floor((item.vote_average/10)*5);
-        let starRatingContent="";
-        for (i=0; i<5; i++){
-            if (i<=starRating-1){
-                starRatingContent+=`<span class="fa fa-star checked float-end"></span>`;
-            }
-            else{
-                starRatingContent+=`<span class="fa fa-star float-end"></span>`
-            }
-        }
+        let starRatingContent=showStarRating(starRating);
+  
         movieContainer.innerHTML+=`
         <li id=${item.id}>
         <div class="row">
@@ -76,8 +109,25 @@ function showMovieInfo(movieArray){
         <div class="offcanvas-body">
           <h3></h3>
           <p>${item.overview}</p>
+          <div class="row">
           <p class="font-weight-bold">Genres: ${movieGenres}</p>
+
+          
+          </div>
+
+          
         </div>
+                  <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              More
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#">Year: ${item.release_date.slice(0,4)}</a></li>
+              <li><a class="dropdown-item" href="#">Runtime: ${item.runtime} mins</a></li>
+              <li><a class="dropdown-item" href="#">Budget: $${item.budget}</a></li>
+              <li><a class="dropdown-item" href="#">Revenue: $${item.revenue}</a></li>
+            </ul>
+          </div>
         </div>
 
         </div>`
@@ -88,13 +138,8 @@ function showMovieInfo(movieArray){
          movieContainer.innerHTML+=`</div>`       ;
   }
 
-  function getMovieIds(filteredMovieArray){
-    movieIds=[];
-    for (movie in filteredMovieArray){
-      movieIds.push(movie.id);
-    }
-    return (movieIds);
-  }
+
+//Filtra las películas según el criterio de búsqueda
 
 function filterMovies(movieArray){
     let filteredMovies= movieArray.filter(

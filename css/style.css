@@ -40,11 +40,12 @@ li {
     color: gray;
 }
 
-.btn {
+.btn-outline-light {
     margin-top: 10%;
     margin-bottom: 10%;
 }
 
-span {
-    align-content: center;
+.btn-secondary {
+    margin-bottom: 2%;
+    margin-left: 1%;
 }
